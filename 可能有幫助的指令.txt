@@ -1,2 +1,8 @@
+git clone https://github.com/redis/hiredis.git
+git clone https://github.com/sewenew/redis-plus-plus.git
+
+
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
  cmake -DCMAKE_PREFIX_PATH=/usr/local ..
+
+ sudo apt install libssl-dev
