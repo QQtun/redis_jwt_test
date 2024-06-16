@@ -5,7 +5,7 @@ project(MyRedisProject)
 set(CMAKE_CXX_STANDARD 17)
 
 # 添加 jwt-cpp 库
-add_subdirectory(external/jwt-cpp)
+find_package(jwt-cpp CONFIG REQUIRED)
 
 # 找到 hiredis 库和头文件
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
@@ -31,7 +31,7 @@ target_link_libraries(my_redis_project
     PRIVATE
     ${HIREDIS_LIBRARY}
     ${REDIS_PLUS_PLUS_LIBRARY}
-    jwt-cpp
+    jwt-cpp::jwt-cpp
 )
 
 # 包含 jwt-cpp 头文件目录
