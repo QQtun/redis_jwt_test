@@ -23,6 +23,9 @@ if(NOT REDIS_PLUS_PLUS_INCLUDE_DIR OR NOT REDIS_PLUS_PLUS_LIBRARY)
     message(FATAL_ERROR "Could not find redis-plus-plus library")
 endif()
 
+# 查找 yaml-cpp 库
+find_package(yaml-cpp REQUIRED)
+
 # 添加主程序
 add_executable(my_redis_project main.cpp)
 
@@ -32,6 +35,7 @@ target_link_libraries(my_redis_project
     ${HIREDIS_LIBRARY}
     ${REDIS_PLUS_PLUS_LIBRARY}
     jwt-cpp::jwt-cpp
+    yaml-cpp::yaml-cpp
 )
 
 # 包含 jwt-cpp 头文件目录

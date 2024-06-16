@@ -1,10 +1,29 @@
 #include <sw/redis++/redis++.h>
 #include <iostream>
 #include <jwt-cpp/jwt.h>
+#include <yaml-cpp/yaml.h>
 
 using namespace sw::redis;
 using sec = std::chrono::seconds;
 using min = std::chrono::minutes;
+
+// 递归函数，用于查找指定键路径的值
+std::string findKey(const YAML::Node& node, const std::string& keyPath) {
+    size_t dotPos = keyPath.find('.');
+    std::string currentKey = keyPath.substr(0, dotPos);
+    
+    if (node[currentKey]) {
+        if (dotPos == std::string::npos) {
+            // 已经到达最后一个键
+            return node[currentKey].as<std::string>();
+        } else {
+            // 仍有子路径，继续递归
+            return findKey(node[currentKey], keyPath.substr(dotPos + 1));
+        }
+    } else {
+        return ""; // 未找到指定的键
+    }
+}
 
 int main() {
     try {
@@ -62,6 +81,10 @@ int main() {
             .with_claim("object", from_raw_json) // Match the exact JSON content
             .verify(decoded);
         /* [verify exact claim] */
+
+        YAML::Node config = YAML::LoadFile("../config.yaml");
+        //std::cout << "Value of 'key': " << config["database"]["host"] << std::endl;
+        std::cout << "Value of 'key': " << findKey(config, "database.host") << std::endl;
     } catch (const Error &err) {
         std::cerr << "Redis 錯誤: " << err.what() << std::endl;
     }
